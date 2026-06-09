@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peak Load Management — Bank X | Kelompok 9</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Syne:wght@700;800&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --white: #ffffff;
+            --ink: #0f1117;
+            --ink-2: #3a3d4a;
+            --ink-3: #6b7080;
+            --rule: #e4e6ed;
+            --surface: #f7f8fc;
+            --blue: #1a56db;
+            --blue-lt: #e8eeff;
+            --blue-mid: #3b6ef5;
+            --green: #0e8a5f;
+            --green-lt: #e4f5ee;
+            --amber: #b45309;
+            --amber-lt: #fef3c7;
+            --mono: 'JetBrains Mono', monospace;
+            --sans: 'Inter', sans-serif;
+            --display: 'Syne', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--sans);
+            color: var(--ink);
+            background: var(--white);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--rule);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            height: 56px;
+        }
+
+        .nav-brand {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue);
+            letter-spacing: 0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink-2);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--blue);
+        }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 6rem 2rem 5rem;
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-eyebrow {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-family: var(--display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--ink);
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 span {
+            color: var(--blue-mid);
+        }
+
+        .hero-desc {
+            font-size: 15px;
+            color: var(--ink-2);
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--blue);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: #1445b8;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink-2);
+            border: 1.5px solid var(--rule);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        /* ── HERO METRICS CARD ── */
+        .hero-metrics {
+            background: var(--surface);
+            border: 1px solid var(--rule);
+            border-radius: 14px;
+            padding: 1.5rem;
+        }
+
+        .hero-metrics .card-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ink-3);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--ink-3);
+        }
+
+        .metric-val {
+            font-family: var(--mono);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .metric-val.good {
+            color: var(--green);
+        }
+
+        .metric-val.warn {
+            color: var(--amber);
+        }
+
+        .metric-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+
+        .badge-green {
+            background: var(--green-lt);
+            color: var(--green);
+        }
+
+        .badge-amber {
+            background: var(--amber-lt);
+            color: var(--amber);
+        }
+
+        /* ── SECTION BASE ── */
+        section {
+            padding: 5rem 2rem;
+        }
+
+        .section-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+
+        .section-title {
+            font-family: var(--display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .section-sub {
+            font-size: 15px;
+            color: var(--ink-2);
+            max-width: 560px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--rule);
+        }
+
+        /* ── PROBLEM ── */
+        #masalah {
+            background: var(--surface);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .problem-card {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .problem-card .icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--blue-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 18px;
+        }
+
+        .problem-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .problem-card p {
+            font-size: 13px;
+            color: var(--ink-2);
+            line-height: 1.6;
+        }
+
+        /* ── SOLUTION / ARCH ── */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .arch-card {
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.25rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .arch-card:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 16px rgba(26, 86, 219, 0.08);
+        }
+
+        .arch-card .tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--blue);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-card h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .arch-card p {
+            font-size: 12px;
+            color: var(--ink-3);
+            line-height: 1.55;
+        }
+
+        /* ── STACK ── */
+        .stack-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 2rem;
+        }
+
+        .stack-pill {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--surface);
+            border: 1px solid var(--rule);
+            border-radius: 6px;
+            padding: 0.35rem 0.8rem;
+            color: var(--ink-2);
+        }
+
+        /* ── TESTING ── */
+        #pengujian {
+            background: var(--surface);
+        }
+
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .test-card {
+            background: var(--white);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+
+        .test-card .test-type {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ink-3);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+        }
+
+        .test-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.6rem;
+        }
+
+        .test-stat .key {
+            font-size: 12px;
+            color: var(--ink-3);
+        }
+
+        .test-stat .val {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .val.pass {
+            color: var(--green);
+        }
+
+        .val.fail {
+            color: var(--amber);
+        }
+
+        .test-note {
+            font-size: 11px;
+            color: var(--ink-3);
+            border-top: 1px solid var(--rule);
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        /* ── DEMO ── */
+        .demo-box {
+            border: 1px solid var(--rule);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .demo-bar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--rule);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-r {
+            background: #ff5f57;
+        }
+
+        .dot-y {
+            background: #ffbd2e;
+        }
+
+        .dot-g {
+            background: #27c93f;
+        }
+
+        .demo-content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+            text-align: center;
+        }
+
+        .demo-icon {
+            font-size: 3rem;
+        }
+
+        .demo-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .demo-content p {
+            font-size: 13px;
+            color: var(--ink-2);
+            max-width: 400px;
+        }
+
+        .demo-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        /* ── TEAM ── */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .team-card {
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .team-card:hover {
+            border-color: var(--blue);
+        }
+
+        .team-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--blue-lt);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--mono);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--blue);
+            margin: 0 auto 0.75rem;
+        }
+
+        .team-card h3 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-card .role {
+            font-size: 11px;
+            color: var(--blue);
+            font-weight: 600;
+            font-family: var(--mono);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-card .nim {
+            font-size: 11px;
+            color: var(--ink-3);
+            font-family: var(--mono);
+        }
+
+        .team-card .contrib {
+            font-size: 11px;
+            color: var(--ink-3);
+            margin-top: 0.5rem;
+            line-height: 1.5;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--ink);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 2.5rem 2rem;
+            text-align: center;
+        }
+
+        footer .footer-title {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.4rem;
+        }
+
+        footer p {
+            font-size: 12px;
+        }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 700px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.25rem;
+            }
+
+            .hero-metrics {
+                display: none;
+            }
+
+            .problem-grid,
+            .arch-grid,
+            .test-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 0 1.25rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            section {
+                padding: 3rem 1.25rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <span class="nav-brand">Kelompok 9 · Capstone 2026</span>
+        <ul class="nav-links">
+            <li><a href="#masalah">Masalah</a></li>
+            <li><a href="#arsitektur">Arsitektur</a></li>
+            <li><a href="#pengujian">Pengujian</a></li>
+            <li><a href="#demo">Demo</a></li>
+            <li><a href="#tim">Tim</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section style="padding: 0;">
+        <div class="hero">
+            <div class="hero-left">
+                <p class="hero-eyebrow">Capstone Project · Universitas Brawijaya</p>
+                <h1>Peak Load Management untuk <span>Sistem Transaksi Bank X</span></h1>
+                <p class="hero-desc">
+                    Implementasi Resilient Edge Architecture berbasis event-driven untuk mengatasi kegagalan kritis saat
+                    beban puncak — tanpa crash, tanpa downtime.
+                </p>
+                <div class="hero-cta">
+                    <a href="https://github.com/ariel-naviandana/capstone-project" target="_blank"
+                        class="btn btn-primary">
+                        ⭐ GitHub Repository
+                    </a>
+                    <a href="https://drive.google.com/file/d/1dlBKZ14VO3to03GZ1Q4idNPRa7toAnZ9/view" target="_blank"
+                        class="btn btn-ghost">
+                        ▶ Video Demo
+                    </a>
+                </div>
+            </div>
+            <div class="hero-metrics">
+                <p class="card-title">Live Test Results</p>
+                <div class="metric-row">
+                    <span class="metric-label">Smoke test p95</span>
+                    <span class="metric-val good">1,6 ms<span class="metric-badge badge-green">SLO ✓</span></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Load test p95</span>
+                    <span class="metric-val good">155,76 ms<span class="metric-badge badge-green">SLO ✓</span></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Spike test p95</span>
+                    <span class="metric-val good">252,22 ms<span class="metric-badge badge-green">SLO ✓</span></span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Error rate (all tests)</span>
+                    <span class="metric-val good">0,00%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Cache hit rate</span>
+                    <span class="metric-val good">100%</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">HPA max pods</span>
+                    <span class="metric-val">10 pods</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Chaos test (Redis down)</span>
+                    <span class="metric-val warn">p95 5 s<span class="metric-badge badge-amber">fallback
+                            aktif</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- MASALAH -->
+    <section id="masalah">
+        <div class="section-inner reveal">
+            <p class="section-label">Latar Belakang</p>
+            <h2 class="section-title">Apa yang rusak di arsitektur lama?</h2>
+            <p class="section-sub">Sistem transaksi Bank X mengalami kegagalan kritis saat menghadapi beban puncak
+                hingga 1 juta transaksi per jam.</p>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">💥</div>
+                    <h3>Crash saat peak load</h3>
+                    <p>Sistem tidak mampu bertahan saat lonjakan trafik terjadi — seperti momen lebaran atau akhir tahun
+                        — dan berakhir dengan total downtime.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🐢</div>
+                    <h3>Latensi p95 hingga 10 detik</h3>
+                    <p>Arsitektur sinkron tanpa caching menyebabkan antrian request menumpuk. Setiap transaksi harus
+                        menunggu proses database selesai sebelum merespons.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🚫</div>
+                    <h3>Tidak ada mekanisme proteksi</h3>
+                    <p>Tidak ada rate limiting, circuit breaker, atau backpressure. Satu komponen gagal langsung
+                        menjalar ke seluruh sistem secara cascading.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">📈</div>
+                    <h3>Biaya server membengkak</h3>
+                    <p>Strategi scaling yang tidak efisien menyebabkan over-provisioning sumber daya cloud, meningkatkan
+                        biaya operasional tanpa peningkatan performa nyata.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- ARSITEKTUR -->
+    <section id="arsitektur">
+        <div class="section-inner reveal">
+            <p class="section-label">Solusi</p>
+            <h2 class="section-title">Resilient Edge Architecture</h2>
+            <p class="section-sub">Sistem dibangun ulang dengan pendekatan asynchronous event-driven — setiap komponen
+                dirancang untuk gagal secara terkontrol dan pulih sendiri.</p>
+            <div class="arch-grid">
+                <div class="arch-card">
+                    <p class="tag">API Layer</p>
+                    <h3>Go + Gin API Service</h3>
+                    <p>Menangani seluruh request masuk dengan rate limiting per-IP dan trace ID propagation end-to-end.
+                    </p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Async Queue</p>
+                    <h3>Kafka (3 partisi)</h3>
+                    <p>Transaksi write diproses asinkron — client mendapat HTTP 202 Accepted instan tanpa menunggu
+                        database.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Caching</p>
+                    <h3>Redis Cache-Aside</h3>
+                    <p>Cache hit rate 100% pada endpoint read-heavy. Write-through diupdate worker setiap transaksi
+                        sukses.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Database</p>
+                    <h3>PostgreSQL Master-Replica</h3>
+                    <p>Pemisahan jalur write dan read. PgBouncer connection pooling mendukung hingga 10.000 client
+                        concurrent.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Resilience</p>
+                    <h3>Circuit Breaker + Retry</h3>
+                    <p>gobreaker melindungi semua external call. Retry dengan exponential backoff 100ms→200ms→400ms
+                        untuk transient error.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Orchestration</p>
+                    <h3>Kubernetes HPA</h3>
+                    <p>Auto-scale dari 2 hingga 10 pod saat CPU >70% atau Memory >80%. Scale-in otomatis setelah beban
+                        turun.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Observability</p>
+                    <h3>Prometheus + Grafana</h3>
+                    <p>Dashboard real-time: RPS, p95 latency, error rate, circuit breaker state, cache hit rate, pgxpool
+                        stats.</p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Fallback</p>
+                    <h3>MongoDB Logger</h3>
+                    <p>Transaksi yang gagal permanen disimpan ke MongoDB sebagai audit trail tanpa menghentikan sistem.
+                    </p>
+                </div>
+                <div class="arch-card">
+                    <p class="tag">Traceability</p>
+                    <h3>Trace ID End-to-End</h3>
+                    <p>UUID Trace ID konsisten dari API → Kafka header → Worker di seluruh structured log JSON zerolog.
+                    </p>
+                </div>
+            </div>
+            <div class="stack-list">
+                <span class="stack-pill">Go 1.26</span>
+                <span class="stack-pill">Gin</span>
+                <span class="stack-pill">Kafka</span>
+                <span class="stack-pill">Redis</span>
+                <span class="stack-pill">PostgreSQL</span>
+                <span class="stack-pill">PgBouncer</span>
+                <span class="stack-pill">MongoDB</span>
+                <span class="stack-pill">Kubernetes</span>
+                <span class="stack-pill">Minikube</span>
+                <span class="stack-pill">Docker</span>
+                <span class="stack-pill">Prometheus</span>
+                <span class="stack-pill">Grafana</span>
+                <span class="stack-pill">k6</span>
+                <span class="stack-pill">GitHub Actions</span>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- PENGUJIAN -->
+    <section id="pengujian">
+        <div class="section-inner reveal">
+            <p class="section-label">Hasil Pengujian</p>
+            <h2 class="section-title">Diuji di berbagai skenario ekstrem</h2>
+            <p class="section-sub">Performance testing dengan k6 dan chaos testing untuk simulasi kegagalan komponen.
+                Target SLO: p95 &lt; 500ms, error rate &lt; 1%.</p>
+            <div class="test-grid">
+                <div class="test-card">
+                    <p class="test-type">Smoke Test</p>
+                    <div class="test-stat"><span class="key">http_req_duration p95</span><span class="val pass">1,6
+                            ms</span></div>
+                    <div class="test-stat"><span class="key">tx_latency p95</span><span class="val pass">1,61 ms</span>
+                    </div>
+                    <div class="test-stat"><span class="key">Error rate</span><span class="val pass">0,00%</span></div>
+                    <p class="test-note">Validasi sistem pada beban ringan. Semua endpoint merespons dengan latensi
+                        sub-2ms.</p>
+                </div>
+                <div class="test-card">
+                    <p class="test-type">Load Test</p>
+                    <div class="test-stat"><span class="key">http_req_duration p95</span><span class="val pass">155,76
+                            ms</span></div>
+                    <div class="test-stat"><span class="key">tx_latency p95</span><span class="val pass">156,44
+                            ms</span></div>
+                    <div class="test-stat"><span class="key">Error rate</span><span class="val pass">0,00%</span></div>
+                    <p class="test-note">Beban normal steady-state. Sistem mempertahankan SLO dengan margin yang cukup.
+                    </p>
+                </div>
+                <div class="test-card">
+                    <p class="test-type">Spike Test</p>
+                    <div class="test-stat"><span class="key">http_req_duration p95</span><span class="val pass">252,22
+                            ms</span></div>
+                    <div class="test-stat"><span class="key">Error rate</span><span class="val pass">0,00%</span></div>
+                    <div class="test-stat"><span class="key">Traffic ditangkis CB</span><span class="val">97,8%</span>
+                    </div>
+                    <p class="test-note">Lonjakan trafik mendadak. Circuit breaker aktif melindungi sistem dari
+                        cascading failure.</p>
+                </div>
+                <div class="test-card">
+                    <p class="test-type">Chaos Test — Redis Down</p>
+                    <div class="test-stat"><span class="key">Error rate</span><span class="val pass">0,00%</span></div>
+                    <div class="test-stat"><span class="key">checks_succeeded</span><span class="val pass">100%</span>
+                    </div>
+                    <div class="test-stat"><span class="key">http_req_duration p95</span><span class="val fail">5
+                            s</span></div>
+                    <p class="test-note">Availability terjaga penuh saat Redis mati. Latensi melonjak karena fallback
+                        langsung ke DB — area pengembangan selanjutnya.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- DEMO -->
+    <section id="demo">
+        <div class="section-inner reveal">
+            <p class="section-label">Demo & Repository</p>
+            <h2 class="section-title">Lihat sistem berjalan langsung</h2>
+            <p class="section-sub">Video demo menampilkan load test k6 200 VUs secara live dengan monitoring Grafana
+                real-time.</p>
+            <div class="demo-box">
+                <div class="demo-bar">
+                    <span class="dot dot-r"></span>
+                    <span class="dot dot-y"></span>
+                    <span class="dot dot-g"></span>
+                    <span style="font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-left: 0.5rem;">
+                        github.com/ariel-naviandana/capstone-project
+                    </span>
+                </div>
+                <div class="demo-content">
+                    <div class="demo-icon">🎬</div>
+                    <h3>Demo: Load Test + Grafana Dashboard</h3>
+                    <p>Sistem diuji dengan 200 Virtual Users secara bersamaan. Pantau latensi p95, error rate, dan HPA
+                        scaling secara real-time.</p>
+                    <div class="demo-links">
+                        <a href="https://drive.google.com/file/d/1dlBKZ14VO3to03GZ1Q4idNPRa7toAnZ9/view" target="_blank"
+                            class="btn btn-primary">▶ Tonton Video Demo</a>
+                        <a href="https://github.com/ariel-naviandana/capstone-project" target="_blank"
+                            class="btn btn-ghost">⭐ Buka Repository</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- TIM -->
+    <section id="tim">
+        <div class="section-inner reveal">
+            <p class="section-label">Tim Pengembang</p>
+            <h2 class="section-title">Kelompok 9 — Teknologi Informasi</h2>
+            <p class="section-sub">Universitas Brawijaya · Fakultas Ilmu Komputer · 2026</p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">AI</div>
+                    <h3>M Agung Al-Ikhsan</h3>
+                    <p class="role">Data Performance Eng.</p>
+                    <p class="nim">235150707111012</p>
+                    <p class="contrib">Database scaling & caching strategy</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">CE</div>
+                    <h3>Cindy Elvina Talitha</h3>
+                    <p class="role">Throughput Optimization Eng.</p>
+                    <p class="nim">235150701111006</p>
+                    <p class="contrib">Caching strategy & async processing</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">AN</div>
+                    <h3>Ariel Naviandana Putra</h3>
+                    <p class="role">Lead System Engineer</p>
+                    <p class="nim">235150701111010</p>
+                    <p class="contrib">Full-stack backend: API, Kafka, Redis, circuit breaker, observability & testing
+                    </p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">KM</div>
+                    <h3>Kinky Maylana Prakoso</h3>
+                    <p class="role">Cloud Platform Architect</p>
+                    <p class="nim">235150701111007</p>
+                    <p class="contrib">Kubernetes & cloud infra, JWT auth</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">FN</div>
+                    <h3>Fahri Nuril Fikri</h3>
+                    <p class="role">Kubernetes Reliability Spec.</p>
+                    <p class="nim">235150700111049</p>
+                    <p class="contrib">K8s manifest, HPA, SLO dashboard & capacity planning</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar">AZ</div>
+                    <h3>Azriel Maulani Rahman</h3>
+                    <p class="role">Cloud Data Infra Eng.</p>
+                    <p class="nim">235150707111034</p>
+                    <p class="contrib">Cloud infra, database scaling & custom error response</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p class="footer-title">Peak Load Management — Sistem Transaksi Bank X</p>
+        <p>Capstone Project · Kelompok 9 · Universitas Brawijaya · Fakultas Ilmu Komputer · 2026</p>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Smooth active nav highlight
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(s => {
+                if (window.scrollY >= s.offsetTop - 80) current = s.id;
+            });
+            navLinks.forEach(a => {
+                a.style.color = a.getAttribute('href') === '#' + current ? 'var(--blue)' : '';
+            });
+        });
+    </script>
+</body>
+
+</html>
